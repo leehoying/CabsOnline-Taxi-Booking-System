@@ -32,13 +32,13 @@ if (isset($_POST['submit']))
   mysqli_errno($DBConnect). ": ".mysqli_error($DBConnect)). "</p>";
       //$row= mysqli_fetch_row($queryResult);
       if (mysqli_num_rows($queryResult)) { // check email whether the member is exist
-//create unqiue code and update database
+//create unique code and update database
       $activation = md5(uniqid(rand(), true));
       $updateString = "UPDATE `customer` SET Activation = '$activation' WHERE Email = '$email'";
       $updateResult = @mysqli_query($DBConnect, $updateString)
       Or die ("<p>Unable to query the table.</p>"."<p>Error code ".
       mysqli_errno($DBConnect). ": ".mysqli_error($DBConnect)). "</p>";
-//send out activation email with unqiue code  
+//send out activation email with unique code  
             if (mysqli_affected_rows($DBConnect) > 0) {
             $email = strtolower($_POST['email']);
             $to = $email;
