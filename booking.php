@@ -151,16 +151,14 @@ if (isset($_POST['submit']))
 
 // format the pickup date and time
 	date_default_timezone_set('UTC');
-	$today = time()+46800; /// + 13 hours adjustment//
+	$today = time()+46800; /// + 13 hours adjustment for New Zealand Timezone
 	$pDateTime = strtotime("$pDate $pTime");
-	//echo date("Y-M-d H:i:s", $today)."<br>"; //check current time//
-	//echo date("Y-M-d H:i:s", $pDateTime)."<br>"; // check booking time//
 
 //validate pickup date & time 
 if (empty($pTime) or empty($pDate)) {echo "Please input the pick up date and time.<br>";}
 elseif ($pDate && $pTime) {
  	$diff = ($pDateTime - $today)/3600; // calculate the difference in hours
-//echo ($diff)." hours<br>";  //check time difference //
+
 			if ($diff >= 0.9) { 
 			++$count;
 			$pDateTime = date('Y-m-d H:i:s', strtotime("$pDate $pTime"));
@@ -175,8 +173,7 @@ echo "Please fill in a valid pickup date & time.<br>";
  	session_start();
 	if (isset($_SESSION['useremail'])) {
 	 $email = $_SESSION['useremail'];
-	// echo $email."<br>"; //check session info//
-	///echo $count;
+
 //write to database of booking table
 if ($count == 7) {
 $query = "INSERT INTO booking (email, passName, passPhone, unitNo, streetNo, streetName, suburb, destination, PickupDateTime, SystemStatus) 
@@ -185,7 +182,7 @@ $queryResult = @mysqli_query($DBConnect, $query)
 Or die ("<p>1.Unable to query the table.</p>"."<p>Error code ".mysqli_errno($DBConnect). ": ".mysqli_error($DBConnect)). "</p>";
 				
 	if (mysqli_affected_rows($DBConnect) == 1) {
-	// get date from database for reply message
+	// get data from database for reply message
 	$refNo = "SELECT bookingNo from booking where  email = '$email' order by SysDateTime desc limit 1 ";
 	$query = @mysqli_query($DBConnect,$refNo) Or die ("<p>2.Unable to query the table.</p>"."<p>Error code ".mysqli_errno($DBConnect). ": ".mysqli_error($DBConnect)). "</p>";
 	$msg = mysqli_fetch_row($query); 
